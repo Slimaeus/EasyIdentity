@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 #region DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
+    //NOTE: You can use UseSqlServer instead
     options.UseSqlite("DataSource=EasyIdentity.db");
 });
 #endregion
