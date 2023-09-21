@@ -37,7 +37,18 @@ if (app.Environment.IsDevelopment())
 {
     using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     await context.Database.MigrateAsync();
+
+    if (!context.Users.Any(x => x.UserName == "admin"))
+    {
+        var admin = new IdentityUser
+        {
+            UserName = "admin",
+            Email = "admin@gmail.com"
+        };
+        var result = await userManager.CreateAsync(admin, "P@ssw0rd");
+    }
 }
 
 app.UseHttpsRedirection();

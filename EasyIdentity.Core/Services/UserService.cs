@@ -10,7 +10,7 @@ public class UserService : IUserService
     {
         _signInManager = signInManager;
     }
-    public async Task<SignInResult> Login(string userName, string password)
+    public async Task<SignInResult> Login(string userName, string password, bool rememberMe = false)
     {
         var user = await _signInManager.UserManager
             .FindByNameAsync(userName);
@@ -18,9 +18,14 @@ public class UserService : IUserService
         if (user == null)
             return SignInResult.Failed;
 
-        var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+        var result = await _signInManager.PasswordSignInAsync(user, password, rememberMe, false);
 
         return result;
+    }
+
+    public Task Logout()
+    {
+        return _signInManager.SignOutAsync();
     }
 
     public async Task<IdentityResult> Register(string userName, string email, string password)
@@ -31,6 +36,10 @@ public class UserService : IUserService
             Email = email
         };
         var result = await _signInManager.UserManager.CreateAsync(user, password);
+        if (result.Succeeded)
+        {
+            await _signInManager.SignInAsync(user, isPersistent: false);
+        }
         return result;
     }
 }

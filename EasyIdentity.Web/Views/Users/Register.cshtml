@@ -1,0 +1,43 @@
+﻿@model RegisterViewModel
+@{
+}
+<div class="row">
+    <div class="col-md-6">
+        <section>
+            <form id="account" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <h2>Create a new account.</h2>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="username" />
+                    <label asp-for="UserName" class="form-label">UserName</label>
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Email" class="form-control" autocomplete="email" aria-required="true" placeholder="name@example.com" />
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Password" class="form-control" autocomplete="new-password" aria-required="true" type="password" />
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Password" class="form-control" autocomplete="new-password" aria-required="true" type="password" />
+                    <label asp-for="Password" class="form-label">Confirm Password</label>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div>
+                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+                </div>
+                <div>
+                    <p>
+                    <a asp-controller="Users" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">Already have an account? Log in.</a>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
