@@ -19,6 +19,7 @@ This project applies Identity for ASP.Net Core with Entity Framework Core.
 - Microsoft.EntityFrameworkCore.Design
 - Microsoft.EntityFrameworkCore.Sqlite
 - Microsoft.EntityFrameworkCore.Tools
+- Microsoft.AspNetCore.Identity.EntityFrameworkCore
 ```
 
 ## 🏃‍♂️ How To Run
@@ -26,3 +27,10 @@ This project applies Identity for ASP.Net Core with Entity Framework Core.
 * Open solution in Visual Studio
 * Set EasyIdentiy.Web project as Startup Project and build the project.
 * Run the application.
+
+## ✏ Note
+
+* Default user: 
+	- Username: admin
+	- Password: P@ssword
+

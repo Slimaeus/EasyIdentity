@@ -40,6 +40,8 @@ if (app.Environment.IsDevelopment())
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     await context.Database.MigrateAsync();
 
+    //NOTE: Remove this if you don't want to seed admin user
+    // ---
     if (!context.Users.Any(x => x.UserName == "admin"))
     {
         var admin = new IdentityUser
@@ -49,6 +51,7 @@ if (app.Environment.IsDevelopment())
         };
         var result = await userManager.CreateAsync(admin, "P@ssw0rd");
     }
+    // ---
 }
 
 app.UseHttpsRedirection();
