@@ -1,68 +1,38 @@
 using EasyIdentity.Core.Data;
 using EasyIdentity.Core.Entities;
-using EasyIdentity.Core.Services;
 using EasyIdentity.Core.Services.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+// Add services to the container.
 
-builder.Services.AddSwaggerGen(options =>
-{
-    var securitySchema = new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        Reference = new OpenApiReference
-        {
-            Type = ReferenceType.SecurityScheme,
-            Id = "Bearer"
-        }
-    };
-
-    options.AddSecurityDefinition("Bearer", securitySchema);
-
-    var securityRequirement = new OpenApiSecurityRequirement
-                {
-                    { securitySchema, new[] { "Bearer" } }
-                };
-
-    options.AddSecurityRequirement(securityRequirement);
-});
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-#region DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     //NOTE: You can use UseSqlServer instead
     options.UseSqlite("DataSource=EasyIdentity.db");
 });
-#endregion
 
-#region Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentityCore<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
-#endregion
 
-#region Jwt Bearer
+// Microsoft.AspNetCore.Authentication.JwtBearer
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"]
     ?? throw new InvalidOperationException("The Token Key not found!")));
 
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -75,22 +45,15 @@ builder.Services
             ClockSkew = TimeSpan.FromSeconds(5)
         };
     });
-#endregion
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
-
-#region Swagger
-app.UseSwagger();
-app.UseSwaggerUI();
-#endregion
 
 if (app.Environment.IsDevelopment())
 {
@@ -106,7 +69,8 @@ if (app.Environment.IsDevelopment())
         var admin = new ApplicationUser
         {
             UserName = "admin",
-            Email = "admin@gmail.com"
+            Email = "admin@gmail.com",
+            FullName = "Administrator"
         };
         var result = await userManager.CreateAsync(admin, "P@ssw0rd");
     }
@@ -114,14 +78,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 
-app.UseRouting();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllers();
 
 app.Run();

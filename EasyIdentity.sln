@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyIdentity.Web", "EasyIdentity.Web\EasyIdentity.Web.csproj", "{15DA20BF-4B6A-4BB1-9A5A-20D19B3D2427}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyIdentity.Web", "EasyIdentity.Web\EasyIdentity.Web.csproj", "{15DA20BF-4B6A-4BB1-9A5A-20D19B3D2427}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyIdentity.Core", "EasyIdentity.Core\EasyIdentity.Core.csproj", "{8A4CE358-8BA1-4CD3-A23F-BCAC3F3F4DEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyIdentity.Core", "EasyIdentity.Core\EasyIdentity.Core.csproj", "{8A4CE358-8BA1-4CD3-A23F-BCAC3F3F4DEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyIdentity.ControllerApi", "EasyIdentity.ControllerApi\EasyIdentity.ControllerApi.csproj", "{761754F4-3549-4D50-B5C2-D0DFD840FE39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{8A4CE358-8BA1-4CD3-A23F-BCAC3F3F4DEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A4CE358-8BA1-4CD3-A23F-BCAC3F3F4DEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A4CE358-8BA1-4CD3-A23F-BCAC3F3F4DEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{761754F4-3549-4D50-B5C2-D0DFD840FE39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{761754F4-3549-4D50-B5C2-D0DFD840FE39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{761754F4-3549-4D50-B5C2-D0DFD840FE39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{761754F4-3549-4D50-B5C2-D0DFD840FE39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

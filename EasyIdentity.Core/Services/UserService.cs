@@ -1,14 +1,15 @@
-﻿using EasyIdentity.Core.Services.Authentication;
+﻿using EasyIdentity.Core.Entities;
+using EasyIdentity.Core.Services.Authentication;
 using Microsoft.AspNetCore.Identity;
 
 namespace EasyIdentity.Core.Services;
 
 public class UserService : IUserService
 {
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ITokenService _tokenService;
 
-    public UserService(SignInManager<IdentityUser> signInManager, ITokenService tokenService)
+    public UserService(SignInManager<ApplicationUser> signInManager, ITokenService tokenService)
     {
         _signInManager = signInManager;
         _tokenService = tokenService;
@@ -50,7 +51,7 @@ public class UserService : IUserService
 
     public async Task<IdentityResult> Register(string userName, string email, string password)
     {
-        var user = new IdentityUser
+        var user = new ApplicationUser
         {
             UserName = userName,
             Email = email

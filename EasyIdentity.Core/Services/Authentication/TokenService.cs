@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EasyIdentity.Core.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -21,12 +21,13 @@ public class TokenService : ITokenService
         _tokenLifespan = TimeSpan.FromHours(5);
     }
 
-    public string CreateToken(IdentityUser user)
+    public string CreateToken(ApplicationUser user)
     {
         var tokenClaims = new List<Claim>
         {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName!),
+                new Claim(ClaimTypes.GivenName, user.FullName),
                 new Claim(ClaimTypes.Email, user.Email!)
         };
 
