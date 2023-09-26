@@ -1,14 +1,34 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EasyIdentity.Core.Services.Authentication;
+using Microsoft.AspNetCore.Identity;
 
 namespace EasyIdentity.Core.Services;
 
 public class UserService : IUserService
 {
     private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly ITokenService _tokenService;
 
-    public UserService(SignInManager<IdentityUser> signInManager)
+    public UserService(SignInManager<IdentityUser> signInManager, ITokenService tokenService)
     {
         _signInManager = signInManager;
+        _tokenService = tokenService;
+    }
+    public async Task<string> Authorize(string userName, string password)
+    {
+        var user = await _signInManager.UserManager
+            .FindByNameAsync(userName);
+
+        if (user == null)
+            return string.Empty;
+
+        var result = await _signInManager.UserManager.CheckPasswordAsync(user, password);
+
+        if (!result)
+            return string.Empty;
+
+        var token = _tokenService.CreateToken(user);
+
+        return token;
     }
     public async Task<SignInResult> Login(string userName, string password, bool rememberMe = false)
     {

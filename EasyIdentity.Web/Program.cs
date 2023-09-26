@@ -1,14 +1,43 @@
 using EasyIdentity.Core.Data;
 using EasyIdentity.Core.Services;
+using EasyIdentity.Core.Services.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    var securitySchema = new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        Reference = new OpenApiReference
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = "Bearer"
+        }
+    };
+
+    options.AddSecurityDefinition("Bearer", securitySchema);
+
+    var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    { securitySchema, new[] { "Bearer" } }
+                };
+
+    options.AddSecurityRequirement(securityRequirement);
+});
+builder.Services.AddEndpointsApiExplorer();
 
 #region DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -24,6 +53,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<ITokenService, TokenService>();
 #endregion
 
 #region Jwt Bearer
@@ -55,6 +85,11 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+#region Swagger
+app.UseSwagger();
+app.UseSwaggerUI();
+#endregion
 
 if (app.Environment.IsDevelopment())
 {

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace EasyIdentity.Core.Services.Authentication;
 
-public class TokenService
+public class TokenService : ITokenService
 {
     private readonly string _tokenKey;
     private readonly TimeSpan _tokenLifespan;
