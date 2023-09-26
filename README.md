@@ -19,7 +19,9 @@ This project applies Identity for ASP.Net Core with Entity Framework Core.
 - Microsoft.EntityFrameworkCore.Design
 - Microsoft.EntityFrameworkCore.Sqlite
 - Microsoft.EntityFrameworkCore.Tools
+
 - Microsoft.AspNetCore.Identity.EntityFrameworkCore
+- Microsoft.AspNetCore.Authentication.JwtBearer
 ```
 
 ## 🏃‍♂️ How To Run
