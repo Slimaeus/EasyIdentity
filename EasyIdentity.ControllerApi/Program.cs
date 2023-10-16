@@ -35,6 +35,19 @@ var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration[
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        // Authenticate the Token with Cookies
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = (context) =>
+            {
+                var hasToken = context.Request.Cookies.TryGetValue("USER_TOKEN", out var token);
+                if (hasToken && !string.IsNullOrEmpty(token))
+                {
+                    context.Token = token;
+                }
+                return Task.CompletedTask;
+            }
+        };
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,

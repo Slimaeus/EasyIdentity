@@ -36,13 +36,17 @@ public class UsersController : ControllerBase
         if (result)
         {
             var token = _tokenService.CreateToken(user);
+            // Append the token to Cookies
+            HttpContext.Response.Cookies.Append("USER_TOKEN", token);
             return Ok(new
             {
-                UserName = user.UserName,
-                FullName = user.FullName,
+                user.UserName,
+                user.FullName,
                 Token = token,
             });
         }
+
+
         return Unauthorized();
     }
 
