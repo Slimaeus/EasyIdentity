@@ -1,3 +1,4 @@
+using EasyIdentity.Core.Constants;
 using EasyIdentity.Core.Data;
 using EasyIdentity.Core.Entities;
 using EasyIdentity.Core.Services.Authentication;
@@ -40,7 +41,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             OnMessageReceived = (context) =>
             {
-                var hasToken = context.Request.Cookies.TryGetValue("USER_TOKEN", out var token);
+                var hasToken = context.Request.Cookies.TryGetValue(AuthenticationConstants.CookieAccessToken, out var token);
                 if (hasToken && !string.IsNullOrEmpty(token))
                 {
                     context.Token = token;

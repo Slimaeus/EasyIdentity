@@ -1,4 +1,5 @@
-﻿using EasyIdentity.Core.Entities;
+﻿using EasyIdentity.Core.Constants;
+using EasyIdentity.Core.Entities;
 using EasyIdentity.Core.Services.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +30,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Login(LoginDto loginDto)
     {
         var user = await _userManager.FindByNameAsync(loginDto.UserName!);
-        if (user == null)
+        if (user is null)
             return Unauthorized();
 
         var result = await _userManager.CheckPasswordAsync(user, loginDto.Password!);
@@ -37,7 +38,7 @@ public class UsersController : ControllerBase
         {
             var token = _tokenService.CreateToken(user);
             // Append the token to Cookies
-            HttpContext.Response.Cookies.Append("USER_TOKEN", token);
+            HttpContext.Response.Cookies.Append(AuthenticationConstants.CookieAccessToken, token);
             return Ok(new
             {
                 user.UserName,
@@ -50,9 +51,5 @@ public class UsersController : ControllerBase
         return Unauthorized();
     }
 
-    public class LoginDto
-    {
-        public string? UserName { get; set; }
-        public string? Password { get; set; }
-    }
+    public record LoginDto(string? UserName, string? Password);
 }
