@@ -22,9 +22,7 @@ public class UsersController : ControllerBase
     [Authorize]
     [HttpGet]
     public IActionResult Get()
-    {
-        return Ok("Ok");
-    }
+        => Ok("Ok");
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto loginDto)
@@ -46,7 +44,6 @@ public class UsersController : ControllerBase
                 Token = token,
             });
         }
-
 
         return Unauthorized();
     }

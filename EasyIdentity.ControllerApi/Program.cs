@@ -17,7 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
 {
     //NOTE: You can use UseSqlServer instead
     options.UseSqlite("DataSource=EasyIdentity.db");
@@ -66,7 +66,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.EnableDeepLinking();
+        options.EnableFilter();
+        options.EnableValidator();
+        options.EnableTryItOutByDefault();
+        options.EnablePersistAuthorization();
+    });
 }
 
 if (app.Environment.IsDevelopment())
