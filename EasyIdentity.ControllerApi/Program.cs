@@ -1,3 +1,4 @@
+using EasyIdentity.ControllerApi.Hubs;
 using EasyIdentity.Core.Constants;
 using EasyIdentity.Core.Data;
 using EasyIdentity.Core.Entities;
@@ -46,6 +47,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 {
                     context.Token = token;
                 }
+                var hasSignalRAccessToken = context.Request.Query.TryGetValue(AuthenticationConstants.SignalRAccessToken, out var signalRAccessToken);
+                if (hasSignalRAccessToken && !string.IsNullOrEmpty(signalRAccessToken))
+                {
+                    context.Token = signalRAccessToken;
+                }
                 return Task.CompletedTask;
             }
         };
@@ -59,6 +65,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ClockSkew = TimeSpan.FromSeconds(5)
         };
     });
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -99,6 +107,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapHub<ChatHub>("/hubs/chat");
 
 app.UseAuthentication();
 
